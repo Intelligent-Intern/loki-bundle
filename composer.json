@@ -1,0 +1,21 @@
+{
+  "name": "intelligent-intern/loki-bundle",
+  "description": "Symfony bundle for Loki integration",
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "IntelligentIntern\\AzureBundle\\": "src/"
+    }
+  },
+  "require": {
+    "php": "^8.2",
+    "symfony/dependency-injection": "7.2.*",
+    "symfony/framework-bundle": "7.2.*"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-main": "1.0-dev"
+    }
+  }
+}
