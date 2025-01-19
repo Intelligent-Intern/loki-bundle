@@ -28,6 +28,8 @@ class LokiService extends AbstractProcessingHandler implements LogServiceInterfa
      */
     public function __construct(VaultService $vaultService)
     {
+        echo "LokiService loaded\n"; // Debugging statement
+
         parent::__construct($this->getLogLevel($vaultService), true);
         $this->client = new Client();
         $this->initializeConfig($vaultService);
