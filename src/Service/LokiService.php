@@ -2,6 +2,8 @@
 
 namespace IntelligentIntern\LokiBundle\Service;
 
+use App\Interface\LogServiceInterface;
+use App\Service\VaultService;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Monolog\Handler\AbstractProcessingHandler;
@@ -10,9 +12,8 @@ use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use App\Service\VaultService;
 
-class LokiService extends AbstractProcessingHandler
+class LokiService extends AbstractProcessingHandler implements LogServiceInterface
 {
     private Client $client;
     private string $lokiUrl;
@@ -110,5 +111,64 @@ class LokiService extends AbstractProcessingHandler
             'json' => $log,
             'headers' => $headers,
         ]);
+    }
+
+    public function supports(string $provider): bool
+    {
+        return strtolower($provider) === 'loki';
+    }
+
+    public function log(string $level, string $message, array $context = []): void
+    {
+        $this->write([
+            'level_name' => strtoupper($level),
+            'message' => $message,
+            'context' => $context,
+        ]);
+    }
+
+    public function setVaultService(VaultService $vaultService): void
+    {
+        $this->initializeConfig($vaultService);
+    }
+
+    public function emergency(string $message, array $context = []): void
+    {
+        $this->log('emergency', $message, $context);
+    }
+
+    public function alert(string $message, array $context = []): void
+    {
+        $this->log('alert', $message, $context);
+    }
+
+    public function critical(string $message, array $context = []): void
+    {
+        $this->log('critical', $message, $context);
+    }
+
+    public function error(string $message, array $context = []): void
+    {
+        $this->log('error', $message, $context);
+    }
+
+    public function warning(string $message, array $context = []): void
+    {
+        $this->log('warning', $message, $context);
+    }
+
+    public function notice(string $message, array $context = []): void
+    {
+        $this->log('notice', $message, $context);
+    }
+
+    public function info(string $message, array $context = []): void
+    {
+        $this->log('info', $message, $context);
+    }
+
+    public function debug(string $message, array $context = []): void
+    {
+        $this->log('debug', $message, $context);
     }
 }
