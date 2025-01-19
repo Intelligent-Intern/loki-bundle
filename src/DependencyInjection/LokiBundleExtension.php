@@ -1,6 +1,6 @@
 <?php
 
-namespace DefaultLogBundle\DependencyInjection;
+namespace DefaultLogBundle\LokiBundle\DependencyInjection;
 
 use Exception;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
