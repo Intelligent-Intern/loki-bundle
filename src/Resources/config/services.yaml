@@ -1,3 +1,4 @@
 services:
     IntelligentIntern\LokiBundle\Service\LokiService:
-        tags: ['log.strategy']
+        tags:
+            - { name: 'log.strategy' }
