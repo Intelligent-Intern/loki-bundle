@@ -127,11 +127,6 @@ class LokiService extends AbstractProcessingHandler implements LogServiceInterfa
         ]);
     }
 
-    public function setVaultService(VaultService $vaultService): void
-    {
-        $this->initializeConfig($vaultService);
-    }
-
     public function emergency(string $message, array $context = []): void
     {
         $this->log('emergency', $message, $context);
