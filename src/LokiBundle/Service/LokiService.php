@@ -3,6 +3,7 @@
 namespace IntelligentIntern\LokiBundle\Service;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Monolog\Handler\AbstractProcessingHandler;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
@@ -17,6 +18,13 @@ class LokiService extends AbstractProcessingHandler
     private string $lokiUrl;
     private ?string $token;
 
+    /**
+     * @throws RedirectionExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     */
     public function __construct(VaultService $vaultService)
     {
         parent::__construct($this->getLogLevel($vaultService), true);
@@ -24,6 +32,13 @@ class LokiService extends AbstractProcessingHandler
         $this->initializeConfig($vaultService);
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws ClientExceptionInterface
+     */
     private function initializeConfig(VaultService $vaultService): void
     {
         $lokiConfig = $vaultService->fetchSecret('secret/data/data/loki');
@@ -36,6 +51,13 @@ class LokiService extends AbstractProcessingHandler
         }
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws ClientExceptionInterface
+     */
     private function getLogLevel(VaultService $vaultService): int
     {
         $lokiConfig = $vaultService->fetchSecret('secret/data/data/loki');
@@ -53,6 +75,9 @@ class LokiService extends AbstractProcessingHandler
         };
     }
 
+    /**
+     * @throws GuzzleException
+     */
     protected function write(array|\Monolog\LogRecord $record): void
     {
         $headers = [];

@@ -2,7 +2,7 @@
 
 namespace IntelligentIntern\LokiBundle;
 
-use src\LokiBundle\DependencyInjection\Compiler\LogServiceCompilerPass;
+use IntelligentIntern\LokiBundle\DependencyInjection\Compiler\LogServiceCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
