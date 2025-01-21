@@ -2,16 +2,16 @@
 
 namespace IntelligentIntern\LokiBundle\Service;
 
-use App\Interface\LogServiceInterface;
 use App\Service\VaultService;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use Monolog\Handler\AbstractProcessingHandler;
+use App\Contract\LogServiceInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use Monolog\Handler\AbstractProcessingHandler;
 
 class LokiService extends AbstractProcessingHandler implements LogServiceInterface
 {
@@ -28,8 +28,6 @@ class LokiService extends AbstractProcessingHandler implements LogServiceInterfa
      */
     public function __construct(VaultService $vaultService)
     {
-        echo "LokiService loaded\n"; // Debugging statement
-
         parent::__construct($this->getLogLevel($vaultService), true);
         $this->client = new Client();
         $this->initializeConfig($vaultService);
@@ -45,7 +43,6 @@ class LokiService extends AbstractProcessingHandler implements LogServiceInterfa
     private function initializeConfig(VaultService $vaultService): void
     {
         $lokiConfig = $vaultService->fetchSecret('secret/data/data/loki');
-
         $this->lokiUrl = $lokiConfig['url'] ?? throw new \RuntimeException('Loki URL not found in Vault.');
         if (isset($lokiConfig['username'], $lokiConfig['password'])) {
             $this->token = base64_encode("{$lokiConfig['username']}:{$lokiConfig['password']}");
@@ -65,7 +62,6 @@ class LokiService extends AbstractProcessingHandler implements LogServiceInterfa
     {
         $lokiConfig = $vaultService->fetchSecret('secret/data/data/loki');
         $logLevel = $lokiConfig['log_level'] ?? 'debug';
-
         return match (strtolower($logLevel)) {
             'info' => \Monolog\Level::Info->value,
             'notice' => \Monolog\Level::Notice->value,
@@ -87,10 +83,8 @@ class LokiService extends AbstractProcessingHandler implements LogServiceInterfa
         if ($this->token) {
             $headers['Authorization'] = "Basic {$this->token}";
         }
-
         $exception = $record['context']['exception'] ?? null;
         $stacktrace = $exception instanceof \Throwable ? $exception->getTraceAsString() : '';
-
         $log = [
             'streams' => [
                 [
@@ -108,7 +102,6 @@ class LokiService extends AbstractProcessingHandler implements LogServiceInterfa
                 ],
             ],
         ];
-
         $this->client->post($this->lokiUrl, [
             'json' => $log,
             'headers' => $headers,

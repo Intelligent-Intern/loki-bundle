@@ -1,11 +1,12 @@
 services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
-        public: true
-
     IntelligentIntern\LokiBundle\Service\:
         resource: '../src/Service/*'
         public: true
         tags:
             - { name: 'log.strategy' }
+
+    App\Factory\LogServiceFactory:
+        arguments:
+            $vaultService: '@App\Service\VaultService'
+            $logResolver: '@App\Domain\LogResolver'
+        public: true

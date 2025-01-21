@@ -11,14 +11,12 @@ class LokiBundle extends AbstractBundle
 {
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
-        echo "LokiBundle loading services...\n"; // Debug-Ausgabe
         $container->import(__DIR__ . '/../config/services.yaml');
     }
 
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);
-
         $container->addCompilerPass(new LogStrategyCompilerPass());
     }
 }
