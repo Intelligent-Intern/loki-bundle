@@ -5,9 +5,3 @@ services:
         tags:
             - { name: 'log.strategy' }
 
-    App\Factory\LogServiceFactory:
-        class: App\Factory\LogServiceFactory
-        arguments:
-            $vaultService: '@App\Service\VaultService'
-            $logResolver: '@App\Domain\LogResolver'
-        public: true
