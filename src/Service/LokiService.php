@@ -29,8 +29,13 @@ class LokiService extends AbstractProcessingHandler implements LogServiceInterfa
     public function __construct(VaultService $vaultService)
     {
         parent::__construct($this->getLogLevel($vaultService), true);
-        $this->client = new Client();
         $this->initializeConfig($vaultService);
+        $this->reset();
+    }
+
+    public function reset(): void
+    {
+        $this->client = new Client();
     }
 
     /**
@@ -113,6 +118,9 @@ class LokiService extends AbstractProcessingHandler implements LogServiceInterfa
         return strtolower($provider) === 'loki';
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function log(string $level, string $message, array $context = []): void
     {
         $this->write([
@@ -122,41 +130,65 @@ class LokiService extends AbstractProcessingHandler implements LogServiceInterfa
         ]);
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function emergency(string $message, array $context = []): void
     {
         $this->log('emergency', $message, $context);
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function alert(string $message, array $context = []): void
     {
         $this->log('alert', $message, $context);
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function critical(string $message, array $context = []): void
     {
         $this->log('critical', $message, $context);
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function error(string $message, array $context = []): void
     {
         $this->log('error', $message, $context);
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function warning(string $message, array $context = []): void
     {
         $this->log('warning', $message, $context);
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function notice(string $message, array $context = []): void
     {
         $this->log('notice', $message, $context);
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function info(string $message, array $context = []): void
     {
         $this->log('info', $message, $context);
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function debug(string $message, array $context = []): void
     {
         $this->log('debug', $message, $context);
