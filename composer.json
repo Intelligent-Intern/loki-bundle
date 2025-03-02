@@ -1,6 +1,7 @@
 {
   "name": "intelligent-intern/loki-bundle",
   "description": "Symfony bundle for Loki integration",
+  "version": "1.0.0",
   "type": "intelligent-intern-bundle",
   "license": "MIT",
   "autoload": {
